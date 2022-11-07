@@ -132,6 +132,18 @@ else ifeq ($(DOCKER_STATE),0)
 else
 	@echo "podman machine or docker daemon is not running"
 	@exit 1
+endif
+
+image-id-silent:
+ifeq ($(PODMAN_STATE),0)
+	@$(eval IMG_ID := "sha256:$(shell podman inspect $(IMG) --format={{.Id}})")
+	@echo ${IMG_ID}
+else ifeq ($(DOCKER_STATE),0)
+	@$(eval IMG_ID := $(shell docker inspect $(IMG) --format={{.Id}}))
+	@echo ${IMG_ID}
+else
+	@echo "podman machine or docker daemon is not running"
+	@exit 1
 endif	
 
 ## image-release: Release image uploaded in heroky container registry and restart worker dyno

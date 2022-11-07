@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      IMG_ID:
+        description: 'Image ID published in Heroku'
+        required: true
+
+env:
+  IMG_ID: ${{ github.event.inputs.IMG_ID }}
+  PROJECTNAME: "krisha-kz-bot"
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Image Release
+        run: |
+            echo "  >  Releasing $IMG_ID"
+            payload={\"updates\":[{\"type\":\"worker\",\"docker_image\":\"$IMG_ID\"}]}
+            echo "  >  Payload $payload"
+            curl -v --netrc -X PATCH https://api.heroku.com/apps/$PROJECTNAME/formation \
+              -d "$payload" \
+              -H "Content-Type: application/json" \
+              -H "Accept: application/vnd.heroku+json; version=3.docker-releases" \
+              -H "Authorization: Bearer $HEROKU_TOKEN"
+        env:
+          HEROKU_TOKEN: ${{ secrets.HEROKU_TOKEN }}
+          
