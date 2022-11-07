@@ -1,0 +1,9 @@
+bin
+test-results.json
+*.md
+*.env
+.vscode
+.git
+.gitignore
+.DS_Store
+Dockerfile*
