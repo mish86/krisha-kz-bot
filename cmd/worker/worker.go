@@ -65,10 +65,7 @@ func setupScanServ(app *Application) {
 			RetentionPolicy: retentionPolicy,
 			Config: webcrawler.Config[holder.WithDT[string]]{
 				Interval: scanInterval,
-				// Parser:   parser.Func[string](krishakz.Parse),
-				Parser: &krishakz.Parser{
-					TimeZone: scanTimeZone,
-				},
+				Parser:   krishakz.NewParser(&scanTimeZone),
 			},
 			OnResult: func(key id.Key, href string) {
 				text := fmt.Sprintf("@%s pls look at https://krisha.kz%s\n", key.UserName, href)

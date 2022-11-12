@@ -282,3 +282,4 @@ issues:
         - gosec
         - noctx
         - wrapcheck
+        - gocognit

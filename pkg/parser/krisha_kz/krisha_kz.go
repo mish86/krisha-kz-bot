@@ -22,7 +22,15 @@ var shortMonthNames = [...]string{
 }
 
 type Parser struct {
-	TimeZone time.Location
+	GetNow func() time.Time
+}
+
+func NewParser(loc *time.Location) parser.Parser[holder.WithDT[string]] {
+	return &Parser{
+		GetNow: func() time.Time {
+			return time.Now().In(loc)
+		},
+	}
 }
 
 func (p *Parser) Parse(payload io.Reader, handler parser.HandlerFunc[holder.WithDT[string]]) error {
@@ -32,12 +40,10 @@ func (p *Parser) Parse(payload io.Reader, handler parser.HandlerFunc[holder.With
 		return err
 	}
 
-	// almatyLocation := time.FixedZone("UTC+6", +6*60*60)
-	// now := time.Now().In(almatyLocation)
-	now := time.Now().In(&p.TimeZone)
-	log.Printf("Parser, Now in %s %s\n", p.TimeZone.String(), now)
+	now := p.GetNow()
+	log.Printf("Parser, Now in %s %s\n", now.Location(), now)
 
-	day := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, &p.TimeZone)
+	day := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
 	today := fmt.Sprintf("%d %s", now.Day(), shortMonthNames[now.Month()-1])
 
 	// Find the review items

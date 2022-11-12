@@ -1,0 +1,35 @@
+[
+    {
+        "TestPage": "./test_data/krisha_kz_1.html",
+        "Now": "10 Nov 22 12:00",
+        "LocName": "Asia/Almaty",
+        "Want": [
+            "/a/show/679859047",
+            "/a/show/679564193",
+            "/a/show/679319161",
+            "/a/show/679575395"
+        ]
+    },
+    {
+        "TestPage": "./test_data/krisha_kz_2.html",
+        "Now": "12 Nov 22 13:00",
+        "LocName": "Asia/Almaty",
+        "Want": [
+            "/a/show/680276423",
+            "/a/show/680276566",
+            "/a/show/680281051",
+            "/a/show/679953988",
+            "/a/show/676129395",
+            "/a/show/677373211",
+            "/a/show/680218736",
+            "/a/show/678773245",
+            "/a/show/680187922",
+            "/a/show/679958089",
+            "/a/show/680203314",
+            "/a/show/679930788",
+            "/a/show/677714277",
+            "/a/show/679957146",
+            "/a/show/680145052"
+        ]
+    }
+]

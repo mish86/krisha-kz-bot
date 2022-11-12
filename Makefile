@@ -194,6 +194,9 @@ heroku-logs-worker:
 heroku-restart-worker:
 	heroku dyno:restart --app $(PROJECTNAME) --dyno=worker
 
+heroku-redis-cli:
+	heroku redis:cli --app $(PROJECTNAME)
+
 # heroku-pg:
 #	heroku pg --app $(PROJECTNAME)
 
