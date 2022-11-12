@@ -53,17 +53,21 @@ func (c *WebCrawler[Result]) Start(ctx context.Context) <-chan Result {
 		// close result channel after crawler interupped from upstream
 		defer close(result)
 
-		// send results immediately without waiting of timer
-		for _, url := range c.urls {
-			if err := c.DoCrawl(ctx, url, result); err != nil {
-				log.Printf("failed to crawl resource %s, error %+v\n", url, err)
-			}
+		doCrawl := func(ctx context.Context, urls []string, result chan<- Result) {
+			// send results immediately without waiting of timer
+			for _, url := range urls {
+				if err := c.DoCrawl(ctx, url, result); err != nil {
+					log.Printf("failed to crawl resource %s, error %+v\n", url, err)
+				}
 
-			// sleep before next call
-			if len(c.urls) > 1 {
-				time.Sleep(scannerPagesDelay)
+				// sleep before next call
+				if len(urls) > 1 {
+					time.Sleep(scannerPagesDelay)
+				}
 			}
 		}
+		// send results immediately without waiting of timer
+		doCrawl(ctx, c.urls, result)
 
 		retryTimer := time.NewTimer(c.config.Interval)
 		// stop retry timer after crawler interupped from upstream
@@ -76,16 +80,7 @@ func (c *WebCrawler[Result]) Start(ctx context.Context) <-chan Result {
 				return
 
 			case <-retryTimer.C:
-				for _, url := range c.urls {
-					if err := c.DoCrawl(ctx, url, result); err != nil {
-						log.Printf("failed to crawl resource %s, error %+v\n", url, err)
-					}
-
-					// sleep before next call
-					if len(c.urls) > 1 {
-						time.Sleep(scannerPagesDelay)
-					}
-				}
+				doCrawl(ctx, c.urls, result)
 
 				// increase counter
 				atomic.AddUint64(&c.counter, 1)
