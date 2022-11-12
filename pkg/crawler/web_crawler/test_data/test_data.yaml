@@ -1,0 +1,15 @@
+- Payload: |-
+    foo
+    bar
+  Want1:
+  - foo
+  - bar
+  Interval: 2s
+  Timeout: 5s
+  Want2:
+  - foo
+  - bar
+  - foo
+  - bar
+  - foo
+  - bar

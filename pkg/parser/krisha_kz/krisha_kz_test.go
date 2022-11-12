@@ -1,7 +1,6 @@
 package krishakz_test
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"krisha_kz_bot/pkg/holder"
@@ -10,6 +9,8 @@ import (
 	"os"
 	"testing"
 	"time"
+
+	"gopkg.in/yaml.v3"
 )
 
 type testUnit struct {
@@ -51,19 +52,19 @@ func newTestUnit(t *testing.T, now string, locName string) *testUnit {
 }
 
 func TestParser(t *testing.T) {
-	const testFile = "./test_data/test_data.json"
+	const testFile = "./test_data/test_data.yaml"
 
 	var cases []struct {
 		testUnit
-		TestPage string   `json:"TestPage"`
-		Now      string   `json:"Now"`
-		LocName  string   `json:"LocName"`
-		Want     []string `json:"Want"`
+		TestPage string   `yaml:"TestPage"`
+		Now      string   `yaml:"Now"`
+		LocName  string   `yaml:"LocName"`
+		Want     []string `yaml:"Want"`
 	}
 
 	if data, err1 := os.ReadFile(testFile); err1 != nil {
 		t.Fatalf("failed to read file %s, got error %v", testFile, err1)
-	} else if err2 := json.Unmarshal(data, &cases); err2 != nil {
+	} else if err2 := yaml.Unmarshal(data, &cases); err2 != nil {
 		t.Fatalf("failed to unmarshal test cases from %s, got error %v", testFile, err2)
 	}
 

@@ -60,7 +60,9 @@ func (c *WebCrawler[Result]) Start(ctx context.Context) <-chan Result {
 			}
 
 			// sleep before next call
-			time.Sleep(scannerPagesDelay)
+			if len(c.urls) > 1 {
+				time.Sleep(scannerPagesDelay)
+			}
 		}
 
 		retryTimer := time.NewTimer(c.config.Interval)
@@ -80,7 +82,9 @@ func (c *WebCrawler[Result]) Start(ctx context.Context) <-chan Result {
 					}
 
 					// sleep before next call
-					time.Sleep(scannerPagesDelay)
+					if len(c.urls) > 1 {
+						time.Sleep(scannerPagesDelay)
+					}
 				}
 
 				// increase counter
